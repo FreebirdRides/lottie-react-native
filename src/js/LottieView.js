@@ -60,8 +60,6 @@ const propTypes = {
   autoSize: PropTypes.bool,
   enableMergePathsAndroidForKitKatAndAbove: PropTypes.bool,
   source: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
-  hardwareAccelerationAndroid: PropTypes.bool,
-  cacheStrategy: PropTypes.oneOf(['none', 'weak', 'strong']),
   onAnimationFinish: PropTypes.func,
 };
 
@@ -80,15 +78,6 @@ const viewConfig = {
   validAttributes: {
     progress: true,
   },
-};
-
-const safeGetViewManagerConfig = moduleName => {
-  if (UIManager.getViewManagerConfig) {
-    // RN >= 0.58
-    return UIManager.getViewManagerConfig(moduleName);
-  }
-  // RN < 0.58
-  return UIManager[moduleName];
 };
 
 class LottieView extends React.Component {
@@ -129,7 +118,7 @@ class LottieView extends React.Component {
       android: () =>
         UIManager.dispatchViewManagerCommand(
           handle,
-          safeGetViewManagerConfig('LottieAnimationView').Commands[name],
+          UIManager.LottieAnimationView.Commands[name],
           args,
         ),
       ios: () => LottieViewManager[name](this.getHandle(), ...args),
